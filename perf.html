@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>XPath vs CSS Selector Performance Test</title>
+    <style>
+        .container { margin: 20px; }
+        .box { margin: 10px; padding: 10px; border: 1px solid #ddd; }
+        .box.active { background-color: #e0ffe0; }
+        .box.inactive { background-color: #ffe0e0; }
+        .box.special { font-weight: bold; }
+        ul.items { list-style-type: none; padding: 0; }
+        ul.items li { margin: 5px 0; }
+        .hidden { display: none; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>XPath vs CSS Selector Performance Test</h2>
+
+        <!-- Example 1: Sibling Element Selection -->
+        <h3>Example 1: Select the first <code>&lt;p&gt;</code> following an <code>&lt;h2&gt;</code></h3>
+        <div class="content">
+            <h2>Section Title</h2>
+            <p>First paragraph.</p>
+            <p>Second paragraph.</p>
+            <p>Third paragraph.</p>
+        </div>
+
+        <!-- Example 2: Attribute Value Containment -->
+        <h3>Example 2: Select <code>&lt;button&gt;</code> where <code>data-action</code> contains "submit"</h3>
+        <div class="buttons">
+            <button id="btn1" data-action="save">Save</button>
+            <button id="btn2" data-action="submit">Submit</button>
+            <button id="btn3" data-action="cancel">Cancel</button>
+        </div>
+
+        <!-- Example 3: Last Element in a List -->
+        <h3>Example 3: Select the last <code>&lt;li&gt;</code> in a list</h3>
+        <ul class="items">
+            <li>Item 1</li>
+            <li>Item 2</li>
+            <li>Item 3</li>
+        </ul>
+
+        <!-- Example 4: Complex Conditional Logic -->
+        <h3>Example 4: Select <code>&lt;div&gt;</code> with <code>data-status</code>="active" and <code>data-role</code>="user"</h3>
+        <div class="container">
+            <div class="box" data-status="active" data-role="admin">Admin Active</div>
+            <div class="box" data-status="inactive" data-role="user">User Inactive</div>
+            <div class="box" data-status="active" data-role="user">User Active</div>
+        </div>
+
+        <!-- Example 5: Partial Attribute Value -->
+        <h3>Example 5: Select <code>&lt;input&gt;</code> elements where <code>name</code> starts with "user"</h3>
+        <div class="container">
+            <input type="text" name="username">
+            <input type="password" name="userpass">
+            <input type="text" name="useremail">
+        </div>
+
+        <!-- Additional Example 6: Simple Element Selection -->
+        <h3>Example 6: Select <code>&lt;div&gt;</code> with class <code>box</code></h3>
+        <div class="container">
+            <div class="box">Box 1</div>
+            <div class="box">Box 2</div>
+            <div class="box">Box 3</div>
+        </div>
+
+        <!-- Additional Example 7: Select Hidden Elements -->
+        <h3>Example 7: Select hidden <code>&lt;div&gt;</code> with class <code>hidden</code></h3>
+        <div class="container">
+            <div class="hidden">Hidden Box 1</div>
+            <div class="hidden">Hidden Box 2</div>
+        </div>
+
+        <!-- Additional Example 8: Descendant Selection -->
+        <h3>Example 8: Select all <code>&lt;p&gt;</code> elements inside a <code>&lt;div&gt;</code></h3>
+        <div class="container">
+            <div class="content">
+                <p>Paragraph 1</p>
+                <p>Paragraph 2</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function testSelectors() {
+            console.log("Starting performance test...");
+
+            // Example 1: Sibling Element Selection
+            console.time("XPath Example 1");
+            document.evaluate("//h2/following-sibling::p[1]", document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
+            console.timeEnd("XPath Example 1");
+
+            console.time("CSS Example 1");
+            document.querySelector("h2 + p");
+            console.timeEnd("CSS Example 1");
+
+            // Example 2: Attribute Value Containment
+            console.time("XPath Example 2");
+            document.evaluate("//button[contains(@data-action, 'submit')]", document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
+            console.timeEnd("XPath Example 2");
+
+            console.time("CSS Example 2");
+            document.querySelector("button[data-action*='submit']");
+            console.timeEnd("CSS Example 2");
+
+            // Example 3: Last Element in a List
+            console.time("XPath Example 3");
+            document.evaluate("//ul[@class='items']/li[last()]", document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
+            console.timeEnd("XPath Example 3");
+
+            console.time("CSS Example 3");
+            document.querySelector(".items li:last-child");
+            console.timeEnd("CSS Example 3");
+
+            // Example 4: Complex Conditional Logic
+            console.time("XPath Example 4");
+            document.evaluate("//div[@data-status='active' and @data-role='user']", document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
+            console.timeEnd("XPath Example 4");
+
+            console.time("CSS Example 4");
+            document.querySelector(".box[data-status='active'][data-role='user']");
+            console.timeEnd("CSS Example 4");
+
+            // Example 5: Partial Attribute Value
+            console.time("XPath Example 5");
+            document.evaluate("//input[starts-with(@name, 'user')]", document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
+            console.timeEnd("XPath Example 5");
+
+            console.time("CSS Example 5");
+            document.querySelector("input[name^='user']");
+            console.timeEnd("CSS Example 5");
+
+            // Additional Example 6: Simple Element Selection
+            console.time("XPath Example 6");
+            document.evaluate("//div[@class='box']", document, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
+            console.timeEnd("XPath Example 6");
+
+            console.time("CSS Example 6");
+            document.querySelectorAll(".box");
+            console.timeEnd("CSS Example 6");
+
+            // Additional Example 7: Select Hidden Elements
+            console.time("XPath Example 7");
+            document.evaluate("//div[@class='hidden']", document, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
+            console.timeEnd("XPath Example 7");
+
+            console.time("CSS Example 7");
+            document.querySelectorAll(".hidden");
+            console.timeEnd("CSS Example 7");
+
+            // Additional Example 8: Descendant Selection
+            console.time("XPath Example 8");
+            document.evaluate("//div[@class='content']//p", document, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
+            console.timeEnd("XPath Example 8");
+
+            console.time("CSS Example 8");
+            document.querySelectorAll(".content p");
+            console.timeEnd("CSS Example 8");
+
+            console.log("Performance test completed.");
+        }
+
+        // Run the test when the page is fully loaded
+        window.onload = testSelectors;
+    </script>
+</body>
+</html>
