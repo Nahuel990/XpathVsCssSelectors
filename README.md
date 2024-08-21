@@ -1,7 +1,5 @@
 # XPath vs CSS Selector Performance Test
 
-To excecute just open the HTML file in the browser and check the console
-
 This project includes a comprehensive HTML page to test and compare the performance of XPath and CSS selectors across various scenarios. The HTML page contains examples where XPath and CSS selectors are tested to understand their relative performance.
 
 ## HTML Examples
@@ -41,14 +39,14 @@ This project includes a comprehensive HTML page to test and compare the performa
 ## Testing Instructions
 
 1. **Open the HTML File**
-   - Open `index.html` in a web browser.
+   - Open `perf.html` in a web browser.
 
 2. **Run JavaScript Performance Tests**
    - The performance tests will run automatically when the page loads.
    - The results will be logged to the browser’s developer console.
 
 3. **View Performance Results**
-   - Open the developer console (`F12` or `Ctrl+Shift+I` / `Cmd+Option+I` on Mac).
+   - Open the developer console (`F12` or `Ctrl+Shift+C` / `Cmd+Option+I` on Mac).
    - Check the console logs for timing results of each XPath and CSS selector test.
 
 ## Notes
@@ -56,5 +54,3 @@ This project includes a comprehensive HTML page to test and compare the performa
 - XPath may provide advantages in complex scenarios, such as conditional logic or sibling element selection.
 - CSS selectors are typically faster and more efficient for straightforward queries and element selection.
 - Performance can vary depending on the browser’s implementation and the complexity of the DOM.
-
-Feel free to modify the HTML and JavaScript code to further explore performance differences and adapt the tests to your specific needs.
